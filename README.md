@@ -15,3 +15,7 @@ Arc-style tab switcher for Chrome: hold <kbd>⌃</kbd> and press <kbd>Q</kbd> to
 3. Check the shortcuts under `chrome://extensions/shortcuts`.
 
 Chrome does not let extensions bind <kbd>Ctrl+Tab</kbd>. To use it anyway, remap <kbd>Ctrl+Tab</kbd> to <kbd>⌃Q</kbd> for Chrome with a tool like Karabiner-Elements.
+
+## License
+
+MIT
