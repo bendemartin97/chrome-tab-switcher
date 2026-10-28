@@ -1,0 +1,60 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Switcher",
+  "version": "1.0.0",
+  "description": "Arc-artiger Tab-Wähler mit Vorschau, sortiert nach zuletzt benutzt.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "favicon"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Tab Switcher"
+  },
+  "commands": {
+    "next": {
+      "suggested_key": {
+        "mac": "MacCtrl+Q",
+        "default": "Alt+Q"
+      },
+      "description": "Tab-Wähler öffnen / nächster Tab"
+    },
+    "prev": {
+      "suggested_key": {
+        "mac": "MacCtrl+Shift+Q",
+        "default": "Alt+Shift+Q"
+      },
+      "description": "Tab-Wähler: vorheriger Tab"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "overlay.html",
+        "overlay.js",
+        "overlay.css"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "switcher.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}

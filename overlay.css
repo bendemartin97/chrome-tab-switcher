@@ -1,0 +1,113 @@
+:root {
+  --panel: rgb(44 44 46 / 0.92);
+  --text: #f5f5f7;
+  --highlight: rgb(255 255 255 / 0.16);
+  color-scheme: dark;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  font: 13px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  color: var(--text);
+}
+
+body {
+  display: grid;
+  place-items: center;
+  animation: fade 0.1s ease-out;
+}
+
+body.popup {
+  background: var(--panel);
+}
+
+.panel {
+  max-width: min(960px, 90vw);
+  padding: 12px 12px 10px;
+  border-radius: 22px;
+  background: var(--panel);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.35), inset 0 0 0 0.5px rgb(255 255 255 / 0.18);
+}
+
+body.popup .panel {
+  max-width: none;
+  padding: 16px;
+  box-shadow: none;
+  background: transparent;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-height: 70vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.card {
+  all: unset;
+  position: relative;
+  flex: 0 0 auto;
+  padding: 6px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.card.selected {
+  background: var(--highlight);
+}
+
+.preview {
+  width: 116px;
+  height: 72px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.06);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 0.5px rgb(255 255 255 / 0.12);
+}
+
+.preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.preview img.placeholder {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.badge {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+  border-radius: 6px;
+  background: rgb(245 245 247);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+}
+
+.caption {
+  width: 0;
+  min-width: 100%;
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
