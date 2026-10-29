@@ -14,7 +14,16 @@ Arc-style tab switcher for Chrome: hold <kbd>⌃</kbd> and press <kbd>Q</kbd> to
 2. Open `chrome://extensions`, enable **Developer mode**, click **Load unpacked** and pick the folder.
 3. Check the shortcuts under `chrome://extensions/shortcuts`.
 
-Chrome does not let extensions bind <kbd>Ctrl+Tab</kbd>. To use it anyway, remap <kbd>Ctrl+Tab</kbd> to <kbd>⌃Q</kbd> for Chrome with a tool like Karabiner-Elements.
+## Ctrl+Tab (macOS)
+
+Chrome does not let extensions bind <kbd>Ctrl+Tab</kbd>. The optional helper in `helper/` rewrites <kbd>Ctrl+Tab</kbd> to <kbd>⌃Q</kbd> (and <kbd>Ctrl+Shift+Tab</kbd> to <kbd>⌃⇧Q</kbd>) while Chrome is the frontmost app, so the switcher takes over Ctrl+Tab and Chrome's own positional tab cycling goes away. Other apps keep their Ctrl+Tab.
+
+```sh
+./helper/install.sh            # build ~/Applications/ChromeCtrlTab.app and start it at login
+./helper/install.sh uninstall  # stop and remove
+```
+
+On first start, allow **ChromeCtrlTab** under System Settings → Privacy & Security → Accessibility. Requires the Xcode command line tools (`swiftc`).
 
 ## License
 
