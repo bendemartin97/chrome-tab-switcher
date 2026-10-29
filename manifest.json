@@ -7,7 +7,9 @@
     "tabs",
     "scripting",
     "storage",
-    "favicon"
+    "favicon",
+    "offscreen",
+    "clipboardWrite"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -32,6 +34,13 @@
         "default": "Alt+Shift+Q"
       },
       "description": "Tab-Wähler: vorheriger Tab"
+    },
+    "copy-url": {
+      "suggested_key": {
+        "mac": "MacCtrl+Shift+C",
+        "default": "Alt+Shift+C"
+      },
+      "description": "Aktuelle URL kopieren"
     }
   },
   "web_accessible_resources": [

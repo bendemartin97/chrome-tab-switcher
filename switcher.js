@@ -91,7 +91,27 @@
     if (msg.type === 'dismiss') close();
   });
 
+  function toast() {
+    const host = document.createElement('div');
+    host.setAttribute('popover', 'manual');
+    host.style.cssText = [
+      'all:initial', 'display:block', 'position:fixed', 'top:16px', 'left:50%', 'transform:translateX(-50%)',
+      'margin:0', 'padding:8px 14px', 'border:0', 'border-radius:10px', 'background:rgb(44 44 46)',
+      'color:#f5f5f7', 'font:500 13px/1.3 -apple-system,BlinkMacSystemFont,system-ui,sans-serif',
+      'box-shadow:0 8px 30px rgb(0 0 0 / 0.3)', 'z-index:2147483647', 'transition:opacity 0.2s', 'opacity:1',
+    ].map((rule) => `${rule} !important`).join(';');
+    host.textContent = navigator.language.startsWith('de') ? 'URL kopiert' : 'URL copied';
+    document.documentElement.appendChild(host);
+    host.showPopover?.();
+    setTimeout(() => host.style.setProperty('opacity', '0', 'important'), 1200);
+    setTimeout(() => host.remove(), 1500);
+  }
+
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.type === 'toast') {
+      toast();
+      sendResponse(true);
+    }
     if (msg.type === 'open') {
       close();
       open(msg.tabs, msg.index);

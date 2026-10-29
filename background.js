@@ -58,7 +58,29 @@ const enqueue = (dir) => {
   queue = queue.then(() => handle(dir)).catch(() => {});
 };
 
-chrome.commands.onCommand.addListener((command) => enqueue(command === 'prev' ? -1 : 1));
+async function copyUrl() {
+  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  if (!tab?.url) return;
+  if (!(await chrome.offscreen.hasDocument())) {
+    await chrome.offscreen.createDocument({
+      url: 'offscreen.html',
+      reasons: ['CLIPBOARD'],
+      justification: 'Copy the current tab URL',
+    });
+  }
+  const copied = await chrome.runtime.sendMessage({ type: 'copy', text: tab.url });
+  if (!copied) return;
+  const shown = await chrome.tabs.sendMessage(tab.id, { type: 'toast' }).catch(() => false);
+  if (shown) return;
+  await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['switcher.js'] })
+    .then(() => chrome.tabs.sendMessage(tab.id, { type: 'toast' }))
+    .catch(() => {});
+}
+
+chrome.commands.onCommand.addListener((command) => {
+  if (command === 'copy-url') copyUrl().catch(() => {});
+  else enqueue(command === 'prev' ? -1 : 1);
+});
 chrome.action.onClicked.addListener(() => enqueue(1));
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {

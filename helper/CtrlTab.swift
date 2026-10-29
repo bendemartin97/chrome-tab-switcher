@@ -1,13 +1,27 @@
 import AppKit
 import ApplicationServices
 
-// Rewrites Ctrl+Tab / Ctrl+Shift+Tab to Ctrl+Q / Ctrl+Shift+Q while Chrome is frontmost.
+// While Chrome is frontmost, rewrites shortcuts Chrome keeps for itself to the extension's commands:
+// Ctrl+(Shift+)Tab -> Ctrl+(Shift+)Q (tab switcher), Cmd+Shift+C -> Ctrl+Shift+C (copy URL).
 let chromeBundleIDs: Set<String> = ["com.google.Chrome", "com.google.Chrome.beta", "com.google.Chrome.canary"]
 let tabKey: CGKeyCode = 48
 let qKey: CGKeyCode = 12
+let cKey: CGKeyCode = 8
+let modifierMask: CGEventFlags = [.maskControl, .maskCommand, .maskAlternate, .maskShift]
 
 var eventTap: CFMachPort?
 let source = CGEventSource(stateID: .hidSystemState)
+
+func rewrite(_ key: CGKeyCode, _ flags: CGEventFlags) -> (CGKeyCode, CGEventFlags)? {
+    let modifiers = flags.intersection(modifierMask)
+    if key == tabKey && (modifiers == [.maskControl] || modifiers == [.maskControl, .maskShift]) {
+        return (qKey, flags)
+    }
+    if key == cKey && modifiers == [.maskCommand, .maskShift] {
+        return (cKey, flags.subtracting(.maskCommand).union(.maskControl))
+    }
+    return nil
+}
 
 func chromeIsFrontmost() -> Bool {
     guard let id = NSWorkspace.shared.frontmostApplication?.bundleIdentifier else { return false }
@@ -20,14 +34,11 @@ let callback: CGEventTapCallBack = { _, type, event, _ in
         return Unmanaged.passUnretained(event)
     }
     guard type == .keyDown || type == .keyUp,
-          CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode)) == tabKey,
-          event.flags.contains(.maskControl),
-          !event.flags.contains(.maskCommand),
-          !event.flags.contains(.maskAlternate),
+          let (key, flags) = rewrite(CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode)), event.flags),
           chromeIsFrontmost(),
-          let replacement = CGEvent(keyboardEventSource: source, virtualKey: qKey, keyDown: type == .keyDown)
+          let replacement = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: type == .keyDown)
     else { return Unmanaged.passUnretained(event) }
-    replacement.flags = event.flags
+    replacement.flags = flags
     replacement.setIntegerValueField(.keyboardEventAutorepeat, value: event.getIntegerValueField(.keyboardEventAutorepeat))
     return Unmanaged.passRetained(replacement)
 }
