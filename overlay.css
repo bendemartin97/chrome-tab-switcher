@@ -1,7 +1,8 @@
 :root {
-  --panel: rgb(44 44 46 / 0.92);
+  --panel: rgb(44 44 46);
   --text: #f5f5f7;
-  --highlight: rgb(255 255 255 / 0.16);
+  --highlight: rgb(255 255 255 / 0.22);
+  --ring: rgb(255 255 255 / 0.9);
   color-scheme: dark;
 }
 
@@ -24,8 +25,8 @@ body.popup {
 }
 
 .panel {
-  max-width: min(960px, 90vw);
-  padding: 12px 12px 10px;
+  max-width: min(1120px, 92vw);
+  padding: 8px 8px 10px;
   border-radius: 22px;
   background: var(--panel);
   box-shadow: 0 20px 60px rgb(0 0 0 / 0.35), inset 0 0 0 0.5px rgb(255 255 255 / 0.18);
@@ -39,10 +40,11 @@ body.popup .panel {
 }
 
 .cards {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), auto);
   justify-content: center;
   gap: 8px;
+  padding: 4px;
   max-height: 70vh;
   overflow-y: auto;
   scrollbar-width: none;
@@ -55,21 +57,28 @@ body.popup .panel {
   padding: 6px;
   border-radius: 12px;
   cursor: pointer;
+  transition: background 0.08s, box-shadow 0.08s;
 }
 
 .card.selected {
   background: var(--highlight);
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.card:not(.selected) .preview {
+  filter: brightness(0.6);
 }
 
 .preview {
-  width: 116px;
-  height: 72px;
+  width: 184px;
+  height: 115px;
   border-radius: 6px;
   overflow: hidden;
   background: rgb(255 255 255 / 0.06);
   display: grid;
   place-items: center;
   box-shadow: 0 0 0 0.5px rgb(255 255 255 / 0.12);
+  transition: filter 0.08s;
 }
 
 .preview img {
@@ -80,8 +89,8 @@ body.popup .panel {
 }
 
 .preview img.placeholder {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
@@ -89,8 +98,8 @@ body.popup .panel {
   position: absolute;
   right: 2px;
   bottom: 2px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   padding: 3px;
   border-radius: 6px;
   background: rgb(245 245 247);

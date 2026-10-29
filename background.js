@@ -16,9 +16,9 @@ async function listTabs(windowId) {
 
 async function openPopupWindow(win, tabs, index) {
   await chrome.storage.session.set({ pending: { tabs, index } });
-  const cols = Math.min(tabs.length, 7);
-  const width = cols * 136 + 32;
-  const height = Math.ceil(tabs.length / 7) * 104 + 72;
+  const cols = Math.min(tabs.length, 5);
+  const width = cols * 204 + 32;
+  const height = Math.ceil(tabs.length / 5) * 135 + 72;
   await chrome.windows.create({
     url: POPUP_URL,
     type: 'popup',

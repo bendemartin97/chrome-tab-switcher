@@ -18,6 +18,8 @@ const favicon = (url) => {
 const toParent = (message) => window.parent.postMessage(message, '*');
 
 function render() {
+  const fit = Math.floor((innerWidth * 0.92 - 24) / 204);
+  cards.style.setProperty('--cols', Math.max(1, Math.min(tabs.length, 5, fit)));
   cards.replaceChildren(...tabs.map((tab, i) => {
     const card = document.createElement('button');
     card.className = 'card';
